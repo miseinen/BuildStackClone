@@ -10,13 +10,14 @@ public enum MoveDirection
 }
 public class CubeSpawner : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] private MovingCube cubePrefab;
     [SerializeField] private GameManager gameManager;
     [SerializeField] private MoveDirection moveDirection;
     
     public void SpawnCube()
     {
-        var cube = Instantiate(cubePrefab);
+        var movingCube = Instantiate(cubePrefab);
 
         if (MovingCube.LastCube != null && MovingCube.LastCube!=gameManager.StartCube)
         {
@@ -26,13 +27,13 @@ public class CubeSpawner : MonoBehaviour
             float z = moveDirection == MoveDirection.Z?
                 transform.position.z:MovingCube.LastCube.transform.position.z;
             
-            cube.transform.position = new Vector3(x,
+            movingCube.transform.position = new Vector3(x,
                 MovingCube.LastCube.transform.position.y + cubePrefab.transform.localScale.y, z);
         }
         else
-            cube.transform.position = transform.position;
+            movingCube.transform.position = transform.position;
 
-        cube.MoveDirection = moveDirection;
+        movingCube.MoveDirection = moveDirection;
     }
 
     private void OnDrawGizmos()

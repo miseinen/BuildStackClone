@@ -12,19 +12,21 @@ public enum GameState
 }
 public class GameManager : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] private MovingCube startCube;
     [SerializeField] private CubeSpawner[] cubeSpawners;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private ScoreText scoreText;
 
-    private GameState gameState=GameState.SpawnCube;
+    private GameState gameState;
     private CubeSpawner currentSpawner;
-    private int spawnerIndex;
     private Color color;
+    private int spawnerIndex;
     private static float rColorStep=1f;
     private static float gColorStep;
     private static float bColorStep;
-    private float yCameraPosition;
+    private float yCameraOffset=2f;
+    
     public MovingCube StartCube => startCube;
 
     public  Action OnCubeSpawned;
@@ -71,11 +73,11 @@ public class GameManager : MonoBehaviour
     private void CameraMove()
     {
         var cameraPosition = mainCamera.transform.position;
-        cameraPosition.y = 2f+MovingCube.CurrentCube.transform.position.y;
+        cameraPosition.y = yCameraOffset+MovingCube.CurrentCube.transform.position.y;
         mainCamera.transform.position = cameraPosition;
     }
 
-    public  Color GetGradientColor()
+    public  Color GetGradientColor()//another way to get gradient color
     {
         var step = 0.25f;
 
@@ -104,11 +106,19 @@ public class GameManager : MonoBehaviour
     public void SetFinalCameraPosition()
     {
         var position = mainCamera.transform.position;
-        mainCamera.transform.position = new Vector3(position.x, 1.83f, position.z);
+
         if (MovingCube.LastCube.transform.position.y < 2f)
+        {
+            position.y = 2f;
             mainCamera.GetComponent<Camera>().orthographicSize = 2f;
+        }
+
         else
-            mainCamera.GetComponent<Camera>().orthographicSize = 2f*MovingCube.LastCube.transform.position.y;
-        
+        {
+            mainCamera.GetComponent<Camera>().orthographicSize = 1.15f*MovingCube.LastCube.transform.position.y;
+            position.y = MovingCube.LastCube.transform.position.y;
+        }
+
+        mainCamera.transform.position = position;
     }
 }

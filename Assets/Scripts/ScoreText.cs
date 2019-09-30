@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ScoreText : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI tapToPlayText;
     [SerializeField] private GameManager gameManager;
@@ -25,8 +26,7 @@ public class ScoreText : MonoBehaviour
     {
         score++;
         highScore = score > highScore ? score : highScore;
-        var key = "HighScore";
-        PlayerPrefs.SetInt(key,highScore);
+        PlayerPrefs.SetInt("HighScore", highScore);
         scoreText.text = $"{score}";
         tapToPlayText.text = "";
     }
